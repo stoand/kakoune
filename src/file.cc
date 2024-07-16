@@ -134,20 +134,19 @@ String compact_path(StringView filename)
 
 StringView tmpdir()
 {
-    // StringView tmpdir = getenv("TMPDIR");
-    // if (not tmpdir.empty())
-    //     return tmpdir.back() == '/' ? tmpdir.substr(0_byte, tmpdir.length()-1)
-    //                                 : tmpdir;
-    return "/data/shared/tmp";
+    StringView tmpdir = getenv("TMPDIR");
+    if (not tmpdir.empty())
+        return tmpdir.back() == '/' ? tmpdir.substr(0_byte, tmpdir.length()-1)
+                                    : tmpdir;
+    return "/tmp";
 }
 
 StringView homedir()
 {
-    return "/data/shared/home";
-    // StringView home = getenv("HOME");
-    // if (home.empty())
-    //     return getpwuid(geteuid())->pw_dir;
-    // return home;
+    StringView home = getenv("HOME");
+    if (home.empty())
+        return getpwuid(geteuid())->pw_dir;
+    return home;
 }
 
 bool fd_readable(int fd)

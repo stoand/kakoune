@@ -29,49 +29,49 @@ Backtrace::Backtrace()
 
 String Backtrace::desc() const
 {
-    String res;
+    #if defined(__GLIBC__) || defined(__APPLE__)
+    char** symbols = backtrace_symbols(stackframes, num_frames);
+    ByteCount size = 0;
+    for (int i = 0; i < num_frames; ++i)
+        size += strlen(symbols[i]) + 1;
+
+    String res; res.reserve(size);
+    for (int i = 0; i < num_frames; ++i)
+    {
+        res += symbols[i];
+        res += "\n";
+    }
+    free(symbols);
     return res;
-    // #if defined(__GLIBC__) || defined(__APPLE__)
-    // char** symbols = backtrace_symbols(stackframes, num_frames);
-    // ByteCount size = 0;
-    // for (int i = 0; i < num_frames; ++i)
-    //     size += strlen(symbols[i]) + 1;
+    #elif defined(__CYGWIN__)
+    HANDLE process = GetCurrentProcess();
 
-    // String res; res.reserve(size);
-    // for (int i = 0; i < num_frames; ++i)
-    // {
-    //     res += symbols[i];
-    //     res += "\n";
-    // }
-    // free(symbols);
-    // return res;
-    // #elif defined(__CYGWIN__)
-    // HANDLE process = GetCurrentProcess();
+    static bool symbols_initialized = false;
+    if (not symbols_initialized)
+    {
+        SymInitialize(process, nullptr, true);
+        symbols_initialized = true;
+    }
 
-    // static bool symbols_initialized = false;
-    // if (not symbols_initialized)
-    // {
-    //     SymInitialize(process, nullptr, true);
-    //     symbols_initialized = true;
-    // }
+    alignas(SYMBOL_INFO) char symbol_info_buffer[sizeof(SYMBOL_INFO) + 256];
+    SYMBOL_INFO* symbol_info = reinterpret_cast<SYMBOL_INFO*>(symbol_info_buffer);
+    symbol_info->MaxNameLen = 255;
+    symbol_info->SizeOfStruct = sizeof(SYMBOL_INFO);
 
-    // alignas(SYMBOL_INFO) char symbol_info_buffer[sizeof(SYMBOL_INFO) + 256];
-    // SYMBOL_INFO* symbol_info = reinterpret_cast<SYMBOL_INFO*>(symbol_info_buffer);
-    // symbol_info->MaxNameLen = 255;
-    // symbol_info->SizeOfStruct = sizeof(SYMBOL_INFO);
-
-    // String res; // res.reserve(num_frames * 276);
-    // for (int i = 0; i < num_frames; ++i)
-    // {
-    //     SymFromAddr(process, (DWORD64)stackframes[i], 0, symbol_info);
-    //     char desc[276];
-    //     format_to(desc, "0x{} ({})\n", hex(symbol_info->Address), symbol_info->Name);
-    //     res += desc;
-    // }
-    // return res;
-    // #else
+    String res; // res.reserve(num_frames * 276);
+    for (int i = 0; i < num_frames; ++i)
+    {
+        SymFromAddr(process, (DWORD64)stackframes[i], 0, symbol_info);
+        char desc[276];
+        format_to(desc, "0x{} ({})\n", hex(symbol_info->Address), symbol_info->Name);
+        res += desc;
+    }
+    return res;
+    #else
     // return "<not implemented>";
-    // #endif
+    String empty;
+    return empty;
+    #endif
 }
 
 }

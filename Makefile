@@ -1,12 +1,10 @@
 .POSIX:
 .SUFFIXES:
 
-# CXX = c++
-# CXX = zig c++ -target arm-linux-musleabi -O0 -g3 # Debug
-CXX = zig c++ -target arm-linux-musleabi
+CXX = c++
 
 debug = no
-static = yes
+static = no
 gzip_man = yes
 # to get format compatible with GitHub archive use "gzip -S .gz" here
 compress_bin = bzip2
@@ -91,7 +89,6 @@ KAK_LDFLAGS = \
 	$(LDFLAGS-sanitize-$(sanitize)) \
 	$(LDFLAGS-static-$(static)) \
 	$(LDFLAGS-os-$(os)) \
-	-latomic -L/home/andreas/Downloads/android-ndk-r26d/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/17/lib/linux/arm/ \
 	$(LDFLAGS)
 
 KAK_LIBS = \

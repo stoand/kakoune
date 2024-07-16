@@ -311,6 +311,24 @@ nix-env -iA nixpkgs.kakoune
 --------------------------------
 ====
 
+[TIP]
+.Android Termux
+====
+Kakoune can Be Cross Compiled with Zig to run on the Termux Android app
+
+Requires android ndk path set as ANDROID_NDK_PATH
+------------------------------------------------------------------------------------------------------------------
+make -j CXX="zig c++ -target arm-linux-musleabi" static=yes \
+    LDFLAGS="-latomic -L$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/17/lib/linux/arm"
+adb push src/kak.opt /storage/self/primary/Download/kak
+
+(inside Termux) cp /storage/self/primary/Download/kak /data/data/com.termux/files/usr/bin/kak
+------------------------------------------------------------------------------------------------------------------
+
+A Physical Keyboard is recommended - this can be plugged in with a Micro USB 2.0 OTG Adapter Cable
+
+====
+
 Running
 ~~~~~~~
 
