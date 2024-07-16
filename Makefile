@@ -2,7 +2,8 @@
 .SUFFIXES:
 
 # CXX = c++
-CXX = zig c++ -target arm-linux-musleabi -O0 -g3
+# CXX = zig c++ -target arm-linux-musleabi -O0 -g3 # Debug
+CXX = zig c++ -target arm-linux-musleabi
 
 debug = no
 static = yes
