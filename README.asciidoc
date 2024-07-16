@@ -293,7 +293,7 @@ xbps-install -S kakoune
 ====
 
 [TIP]
-.Termux
+.Android - Termux
 ====
 Kakoune is available in the repositories.
 
@@ -301,20 +301,8 @@ It can be installed with
 -------------------
 pkg install kakoune
 -------------------
-====
 
-[TIP]
-.Nix
-====
---------------------------------
-nix-env -iA nixpkgs.kakoune
---------------------------------
-====
-
-[TIP]
-.Android Termux
-====
-Kakoune can Be Cross Compiled with Zig to run on the Termux Android app
+Kakoune can Be Cross Compiled with Zig from scratch
 
 Requires android ndk path set as ANDROID_NDK_PATH
 ------------------------------------------------------------------------------------------------------------------
@@ -326,7 +314,14 @@ adb push src/kak.opt /storage/self/primary/Download/kak
 ------------------------------------------------------------------------------------------------------------------
 
 A Physical Keyboard is recommended - this can be plugged in with a Micro USB 2.0 OTG Adapter Cable
+====
 
+[TIP]
+.Nix
+====
+--------------------------------
+nix-env -iA nixpkgs.kakoune
+--------------------------------
 ====
 
 Running
