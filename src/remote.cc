@@ -597,24 +597,27 @@ void RemoteUI::exit(int status)
 
 String get_user_name()
 {
-    auto pw = getpwuid(geteuid());
-    if (pw)
-      return pw->pw_name;
-    return getenv("USER");
+    String fixed("andy");
+    return fixed;
+    // auto pw = getpwuid(geteuid());
+    // if (pw)
+    //   return pw->pw_name;
+    // return getenv("USER");
 }
 
 const String& session_directory()
 {
     static String session_dir = [] {
-        StringView xdg_runtime_dir = getenv("XDG_RUNTIME_DIR");
-        if (not xdg_runtime_dir.empty())
-        {
-            if (struct stat st; stat(xdg_runtime_dir.zstr(), &st) == 0 && st.st_uid == geteuid())
-                return format("{}/kakoune", xdg_runtime_dir);
-            else
-                write_to_debug_buffer("XDG_RUNTIME_DIR does not exist or not owned by current user, using tmpdir");
-        }
-        return format("{}/kakoune-{}", tmpdir(), get_user_name());
+        // StringView xdg_runtime_dir = getenv("XDG_RUNTIME_DIR");
+        // if (not xdg_runtime_dir.empty())
+        // {
+        //     if (struct stat st; stat(xdg_runtime_dir.zstr(), &st) == 0 && st.st_uid == geteuid())
+        //         return format("{}/kakoune", xdg_runtime_dir);
+        //     else
+        //         write_to_debug_buffer("XDG_RUNTIME_DIR does not exist or not owned by current user, using tmpdir");
+        // }
+        // return format("{}/kakoune-{}", tmpdir(), get_user_name());
+        return format("/data/shared/kak-session");
     }();
     return session_dir;
 }
