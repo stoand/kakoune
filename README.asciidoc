@@ -306,6 +306,9 @@ Kakoune can Be Cross Compiled with Zig from scratch
 
 Requires android ndk path set as ANDROID_NDK_PATH
 ------------------------------------------------------------------------------------------------------------------
+cat $ANDROID_NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/17/lib/linux/arm/libatomic.a
+# copy over the .a file that contains the atomic definitions
+
 make -j CXX="zig c++ -target arm-linux-musleabi" static=yes \
     LDFLAGS="-latomic -L$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/lib/clang/17/lib/linux/arm"
 adb push src/kak.opt /storage/self/primary/Download/kak
